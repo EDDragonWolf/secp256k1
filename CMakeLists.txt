@@ -22,12 +22,16 @@ option(SECP256K1_USE_GMP "Use GMP library instead of built-in implementations" O
 
 add_subdirectory(src)
 
-
+#if (ENABLE_MODULE_RECOVERY)
 #target_include_directories(secp256k1 PUBLIC . ./src PRIVATE ${GMP_INCLUDE_DIR})
-#target_compile_definitions(secp256k1
+target_compile_definitions(secp256k1
 #	PUBLIC -DUSE_NUM_NONE=1 -DUSE_FIELD_5X52=1 -DUSE_FIELD_INV_BUILTIN=1 -DUSE_SCALAR_4X64=1 -DUSE_SCALAR_INV_BUILTIN=1 -DHAVE___INT128=1 -DVERIFY=1
-#	PRIVATE -DENABLE_MODULE_ECDH -DENABLE_MODULE_RECOVERY -DENABLE_MODULE_SCHNORR
-#)
+    PRIVATE
+#-DENABLE_MODULE_ECDH
+    -DENABLE_MODULE_RECOVERY
+#-DENABLE_MODULE_SCHNORR
+)
+#endif()
 #
 #add_executable(tests src/tests.c)
 #target_link_libraries(tests secp256k1)
